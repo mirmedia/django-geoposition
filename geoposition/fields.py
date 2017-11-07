@@ -52,3 +52,9 @@ class GeopositionField(models.Field):
         }
         defaults.update(kwargs)
         return super(GeopositionField, self).formfield(**defaults)
+
+    def clean(self, value, model_instance):
+        value = self.to_python(value)
+        self.validate(value, model_instance)
+        self.run_validators(value)
+        return "%s,%s" % (str(value[0]), str(value[1]))
